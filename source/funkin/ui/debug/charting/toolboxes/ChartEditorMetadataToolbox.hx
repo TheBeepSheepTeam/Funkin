@@ -157,6 +157,10 @@ class ChartEditorMetadataToolbox extends ChartEditorBaseToolbox
       chartEditorState.currentSongChartDifficultyRating = event.target.value;
     };
 
+    inputManiaNumber.onChange = function(event:UIEvent) {
+      chartEditorState.currentSongChartMania = event.target.value;
+    };
+
     buttonCharacterOpponent.onClick = function(_) {
       chartEditorState.openCharacterDropdown(CharacterType.DAD, false);
     };
@@ -182,6 +186,7 @@ class ChartEditorMetadataToolbox extends ChartEditorBaseToolbox
     inputNoteStyle.value = chartEditorState.currentSongMetadata.playData.noteStyle;
     inputBPM.value = chartEditorState.currentSongMetadata.timeChanges[0].bpm;
     inputDifficultyRating.value = chartEditorState.currentSongChartDifficultyRating;
+    inputManiaNumber.value = chartEditorState.currentSongChartMania;
     inputScrollSpeed.value = chartEditorState.currentSongChartScrollSpeed;
     labelScrollSpeed.text = 'Scroll Speed: ${chartEditorState.currentSongChartScrollSpeed}x';
     frameVariation.text = 'Variation: ${chartEditorState.selectedVariation.toTitleCase()}';
