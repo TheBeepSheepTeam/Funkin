@@ -6,7 +6,7 @@ Housing all the code for it, documentations etc.
 
 Download at [gamebanana] or [releases]
 
-View documentation [here](https://www.github.com/tposejank/Funkin/blob/extra-keys/docs/VSEK-DOCS.md)
+View documentation [here](https://www.github.com/FunkinExtraKeys/V-Slice-EK/docs/VSEK-DOCS.md)
 
 # Friday Night Funkin'
 
