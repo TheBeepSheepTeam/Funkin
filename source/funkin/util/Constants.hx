@@ -534,4 +534,20 @@ class Constants
    * 0.04 = 4% of distance per frame.
    */
   public static final DEFAULT_CAMERA_FOLLOW_RATE:Float = 0.04;
+
+  /**
+   * The maximum keys the engine currently supports.
+   */
+  public static final MAX_NOTE_DIRECTIONS:Int = 17;
+
+  /**
+   * The default ammount of keys.
+   */
+  public static final DEFAULT_KEYS:Int = 3;
+
+  /**
+   * The default key ammounts for non extra key supported charts.
+   * This is so no errors of uninitialized 'keys' are thrown.
+   */
+  public static final DEFAULT_KEYS_MAP:Map<String, Int> = ['default' => 3];
 }
