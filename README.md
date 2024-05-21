@@ -1,4 +1,14 @@
-# Friday Night Funkin' 
+# V-Slice with Extra Keys
+
+Welcome to the V-Slice with Extra Keys branch.
+
+Housing all the code for it, documentations etc.
+
+Download at [gamebanana] or [releases]
+
+View documentation [here](https://www.github.com/tposejank/Funkin/blob/extra-keys/docs/VSEK-DOCS.md)
+
+# Friday Night Funkin'
 
 Friday Night Funkin' is a rhythm game. Built using HaxeFlixel for Ludum Dare 47.
 
