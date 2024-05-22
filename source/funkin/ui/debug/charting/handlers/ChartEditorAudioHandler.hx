@@ -231,6 +231,7 @@ class ChartEditorAudioHandler
             waveformSprite.width = (ChartEditorState.GRID_SIZE) * 2;
             waveformSprite.time = 0;
             waveformSprite.duration = duration;
+            waveformSprite.character = 'Player';
             state.audioWaveforms.add(waveformSprite);
           }
           else
@@ -257,6 +258,7 @@ class ChartEditorAudioHandler
             waveformSprite.width = (ChartEditorState.GRID_SIZE) * 2;
             waveformSprite.time = 0;
             waveformSprite.duration = duration;
+            waveformSprite.character = 'Opponent';
             state.audioWaveforms.add(waveformSprite);
           }
           else
