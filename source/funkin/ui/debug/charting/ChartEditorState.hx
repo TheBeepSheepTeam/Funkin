@@ -2218,7 +2218,7 @@ class ChartEditorState extends UIState // UIState derives from MusicBeatState
 
     this.updateTheme();
 
-    buildGrid();
+    buildGrid(true);
     buildMeasureTicks();
     buildNotePreview();
 
@@ -2448,46 +2448,56 @@ class ChartEditorState extends UIState // UIState derives from MusicBeatState
   /**
    * Builds and displays the chart editor grid, including the playhead and cursor.
    */
-  function buildGrid():Void
+  function buildGrid(?firstTime:Bool = false):Void
   {
     if (gridBitmap == null) throw 'ERROR: Tried to build grid, but gridBitmap is null! Check ChartEditorThemeHandler.updateTheme().';
 
-    if (gridTiledSprite != null) remove(gridTiledSprite);
+    if (firstTime)
+    {
+      gridTiledSprite = new FlxTiledSprite(gridBitmap, gridBitmap.width, 1000, false, true);
+      gridTiledSprite.x = GRID_X_POS; // Center the grid.
+      gridTiledSprite.y = GRID_INITIAL_Y_POS; // Push down to account for the menu bar.
+      add(gridTiledSprite);
+      gridTiledSprite.zIndex = 10;
 
-    gridTiledSprite = new FlxTiledSprite(gridBitmap, gridBitmap.width, 1000, false, true);
-    gridTiledSprite.x = GRID_X_POS; // Center the grid.
-    gridTiledSprite.y = GRID_INITIAL_Y_POS; // Push down to account for the menu bar.
-    add(gridTiledSprite);
-    gridTiledSprite.zIndex = 10;
+      gridGhostNote = new ChartEditorNoteSprite(this);
+      gridGhostNote.alpha = 0.6;
+      gridGhostNote.noteData = new SongNoteData(0, 0, 0, "");
+      gridGhostNote.visible = false;
+      add(gridGhostNote);
+      gridGhostNote.zIndex = 11;
 
-    if (gridGhostNote != null) remove(gridGhostNote);
+      gridGhostHoldNote = new ChartEditorHoldNoteSprite(this);
+      gridGhostHoldNote.alpha = 0.6;
+      gridGhostHoldNote.noteData = null;
+      gridGhostHoldNote.visible = false;
+      add(gridGhostHoldNote);
+      gridGhostHoldNote.zIndex = 11;
 
-    gridGhostNote = new ChartEditorNoteSprite(this);
-    gridGhostNote.alpha = 0.6;
-    gridGhostNote.noteData = new SongNoteData(0, 0, 0, "");
-    gridGhostNote.visible = false;
-    add(gridGhostNote);
-    gridGhostNote.zIndex = 11;
+      gridGhostEvent = new ChartEditorEventSprite(this, true);
+      gridGhostEvent.alpha = 0.6;
+      gridGhostEvent.eventData = new SongEventData(-1, '', {});
+      gridGhostEvent.visible = false;
+      add(gridGhostEvent);
+      gridGhostEvent.zIndex = 12;
+    }
+    else
+    {
+      // if (gridTiledSprite != null) remove(gridTiledSprite);
 
-    if (gridGhostHoldNote != null) remove(gridGhostHoldNote);
+      // gridTiledSprite = new FlxTiledSprite(gridBitmap, gridBitmap.width, 1000, false, true);
+      gridTiledSprite.width = gridBitmap.width;
+      gridTiledSprite.x = GRID_X_POS; // Center the grid (again).
+      // gridTiledSprite.y =
+      // add(gridTiledSprite);
+      // gridTiledSprite.zIndex = 10;
 
-    gridGhostHoldNote = new ChartEditorHoldNoteSprite(this);
-    gridGhostHoldNote.alpha = 0.6;
-    gridGhostHoldNote.noteData = null;
-    gridGhostHoldNote.visible = false;
-    add(gridGhostHoldNote);
-    gridGhostHoldNote.zIndex = 11;
-
-    if (gridGhostEvent != null) remove(gridGhostEvent);
-
-    gridGhostEvent = new ChartEditorEventSprite(this, true);
-    gridGhostEvent.alpha = 0.6;
-    gridGhostEvent.eventData = new SongEventData(-1, '', {});
-    gridGhostEvent.visible = false;
-    add(gridGhostEvent);
-    gridGhostEvent.zIndex = 12;
+      // this.scrollPositionInPixels = this.scrollPositionInPixels;
+    }
 
     buildNoteGroup();
+
+    // Break from firstTime call
 
     if (gridPlayhead != null)
     {
@@ -2512,31 +2522,27 @@ class ChartEditorState extends UIState // UIState derives from MusicBeatState
     playheadBlock.y = -PLAYHEAD_HEIGHT / 2;
     gridPlayhead.add(playheadBlock);
 
-    if (healthIconDad != null) remove(healthIconDad);
-
-    // Character icons.
-    healthIconDad = new HealthIcon(currentSongMetadata.playData.characters.opponent);
-    healthIconDad.autoUpdate = false;
-    healthIconDad.size.set(0.5, 0.5);
-    add(healthIconDad);
-    healthIconDad.zIndex = 30;
-
-    if (healthIconBF != null) remove(healthIconBF);
-
-    healthIconBF = new HealthIcon(currentSongMetadata.playData.characters.player);
-    healthIconBF.autoUpdate = false;
-    healthIconBF.size.set(0.5, 0.5);
-    healthIconBF.flipX = true;
-    add(healthIconBF);
-    healthIconBF.zIndex = 30;
-
-    if (audioWaveforms != null)
+    // Return to firstTime call
+    if (firstTime)
     {
-      remove(audioWaveforms);
-      audioWaveforms = new FlxTypedSpriteGroup<WaveformSprite>();
-    }
+      // Character icons.
 
-    add(audioWaveforms);
+      healthIconDad = new HealthIcon(currentSongMetadata.playData.characters.opponent);
+      healthIconDad.autoUpdate = false;
+      healthIconDad.size.set(0.5, 0.5);
+      add(healthIconDad);
+      healthIconDad.zIndex = 30;
+
+      healthIconBF = new HealthIcon(currentSongMetadata.playData.characters.player);
+      healthIconBF.autoUpdate = false;
+      healthIconBF.size.set(0.5, 0.5);
+      healthIconBF.flipX = true;
+      add(healthIconBF);
+      healthIconBF.zIndex = 30;
+
+      // audioWaveforms = new FlxTypedSpriteGroup<WaveformSprite>();
+      add(audioWaveforms);
+    }
   }
 
   function buildMeasureTicks():Void
@@ -2560,6 +2566,24 @@ class ChartEditorState extends UIState // UIState derives from MusicBeatState
     var measureTicksWidth = (GRID_SIZE);
     notePreview.x = NOTE_PREVIEW_X_POS;
     measureTicks.x = gridTiledSprite.x - measureTicksWidth;
+
+    if (audioWaveforms != null)
+    {
+      var totalOffset = 160;
+      var totalKeys = (currentSongChartMania + 1);
+
+      for (waveform in audioWaveforms.members)
+      {
+        if (waveform.character == 'Player')
+        {
+          waveform.x = 840 + (totalKeys * GRID_SIZE) - totalOffset;
+        }
+        else if (waveform.character == 'Opponent')
+        {
+          waveform.x = 360 - (totalKeys * GRID_SIZE) + totalOffset;
+        }
+      }
+    }
   }
 
   function buildNotePreview():Void
@@ -2695,6 +2719,11 @@ class ChartEditorState extends UIState // UIState derives from MusicBeatState
   function buildNoteGroup():Void
   {
     if (gridTiledSprite == null) throw 'ERROR: Tried to build note groups, but gridTiledSprite is null! Check ChartEditorState.buildGrid().';
+
+    if (renderedHoldNotes != null) remove(renderedHoldNotes);
+    if (renderedNotes != null) remove(renderedHoldNotes);
+    if (renderedEvents != null) remove(renderedHoldNotes);
+    if (renderedSelectionSquares != null) remove(renderedHoldNotes);
 
     renderedHoldNotes.setPosition(gridTiledSprite.x, gridTiledSprite.y);
     add(renderedHoldNotes);
@@ -4791,6 +4820,8 @@ class ChartEditorState extends UIState // UIState derives from MusicBeatState
                   performCommand(new AddNotesCommand([newNoteData], FlxG.keys.pressed.CONTROL));
 
                   currentPlaceNoteData = newNoteData;
+
+                  trace('Placed note... ' + cursorColumn + ' at ' + cursorSnappedMs);
                 }
               }
             }
@@ -5457,7 +5488,7 @@ class ChartEditorState extends UIState // UIState derives from MusicBeatState
     {
       // Base X position to the right of the grid.
       var xOffset = 45 - (healthIconBF.width / 2);
-      healthIconBF.x = (gridTiledSprite == null) ? (0) : (GRID_X_POS + gridTiledSprite.width + xOffset);
+      healthIconBF.x = (gridTiledSprite == null && gridBitmap == null) ? (0) : (GRID_X_POS + gridBitmap.width + xOffset);
       var yOffset = 30 - (healthIconBF.height / 2);
       healthIconBF.y = (gridTiledSprite == null) ? (0) : (GRID_INITIAL_Y_POS - NOTE_SELECT_BUTTON_HEIGHT) + yOffset;
     }
