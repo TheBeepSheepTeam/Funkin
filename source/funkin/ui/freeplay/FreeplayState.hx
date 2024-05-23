@@ -198,9 +198,27 @@ class FreeplayState extends MusicBeatSubState
     // programmatically adds the songs via LevelRegistry and SongRegistry
     for (levelId in LevelRegistry.instance.listSortedLevelIds())
     {
-      for (songId in LevelRegistry.instance.parseEntryData(levelId).songs)
+      for (levelId in LevelRegistry.instance.listSortedLevelIds())
+    {
+      var level:Level = LevelRegistry.instance.fetchEntry(levelId);
+
+      if (level == null)
       {
+        trace('[WARN] Could not find level with id (${levelId})');
+        continue;
+      }
+
+      for (songId in level.getSongs())
+      {
+      /*for (songId in LevelRegistry.instance.parseEntryData(levelId).songs)
+      {*/
         var song:Song = SongRegistry.instance.fetchEntry(songId);
+
+        if (song == null)
+        {
+          trace('[WARN] Could not find song with id (${songId})');
+          continue;
+        }
 
         // Only display songs which actually have available charts for the current character.;
         var variations = [Constants.DEFAULT_VARIATION];
